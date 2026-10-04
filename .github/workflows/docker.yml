@@ -138,6 +138,7 @@ jobs:
           pixi --version
           uv --version
           uvx --version
+          fusermount --version
           uv venv /tmp/smoke-venv --python /usr/local/bin/python
           /tmp/smoke-venv/bin/python -c 'import ssl; print(ssl.OPENSSL_VERSION)'
           SH

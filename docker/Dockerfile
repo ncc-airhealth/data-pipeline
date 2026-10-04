@@ -13,6 +13,11 @@ RUN if [ "$TARGETPLATFORM" != "linux/amd64" ]; then \
 
 ENV UV_PYTHON_DOWNLOADS=never
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends fuse3 \
+    && ln -s /bin/fusermount3 /usr/local/bin/fusermount \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=seaweedfs /usr/bin/weed /usr/local/bin/weed
 COPY --from=pixi /usr/local/bin/pixi /usr/local/bin/pixi
 COPY --from=uv /uv /uvx /usr/local/bin/
@@ -23,6 +28,7 @@ RUN test -s /etc/ssl/certs/ca-certificates.crt \
     && python -c "import platform, sys; assert platform.machine() == 'x86_64', platform.machine(); assert sys.version_info[:3] == (3, 12, 15), sys.version" \
     && weed version \
     && pixi --version \
-    && uv --version
+    && uv --version \
+    && fusermount --version
 
 CMD ["bash"]
